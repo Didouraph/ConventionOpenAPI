@@ -1,10 +1,17 @@
- /reviews:
+openapi: 3.0.0
+info:
+  title: API de Gestion de Reviews
+  version: 1.0.0
+  description: Une API simple pour gérer les avis clients.
+
+paths:
+  /reviews:
     get:
-      summary: List all reviews
+      summary: Lister tous les avis
       tags: [Reviews]
       responses:
         '200':
-          description: List of reviews
+          description: Liste des avis récupérée avec succès
           content:
             application/json:
               schema:
@@ -12,7 +19,7 @@
                 items:
                   $ref: '#/components/schemas/Review'
     post:
-      summary: Create a review
+      summary: Créer un avis
       tags: [Reviews]
       requestBody:
         required: true
@@ -22,34 +29,34 @@
               $ref: '#/components/schemas/ReviewInput'
       responses:
         '201':
-          description: Review created
+          description: Avis créé avec succès
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
-
 
   /reviews/{id}:
     parameters:
       - name: id
         in: path
         required: true
+        description: L'identifiant unique de l'avis
         schema:
           type: integer
     get:
-      summary: Get a review by ID
+      summary: Obtenir un avis par ID
       tags: [Reviews]
       responses:
         '200':
-          description: Review details
+          description: Détails de l'avis
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
         '404':
-          description: Review not found
+          description: Avis non trouvé
     put:
-      summary: Update a review
+      summary: Mettre à jour un avis
       tags: [Reviews]
       requestBody:
         required: true
@@ -59,16 +66,52 @@
               $ref: '#/components/schemas/ReviewInput'
       responses:
         '200':
-          description: Review updated
+          description: Avis mis à jour avec succès
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Review'
+        '404':
+          description: Avis non trouvé
     delete:
-      summary: Delete a review
+      summary: Supprimer un avis
       tags: [Reviews]
       responses:
         '204':
-          description: Review deleted
+          description: Avis supprimé avec succès
         '404':
-          description: Review not found
+          description: Avis non trouvé
+
+# Cette section est indispensable pour définir la structure de tes objets Review
+components:
+  schemas:
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        comment:
+          type: string
+          example: "Excellent service !"
+        createdAt:
+          type: string
+          format: date-time
+
+    ReviewInput:
+      type: object
+      required:
+        - rating
+        - comment
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
