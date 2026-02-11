@@ -1,11 +1,17 @@
+openapi: 3.0.0
+info:
+  title: API Gestion des Artistes
+  version: 1.0.0
+  description: Documentation pour la gestion du catalogue des artistes.
 
- /artists:
+paths:
+  /artists:
     get:
-      summary: List all artists
+      summary: Lister tous les artistes
       tags: [Artists]
       responses:
         '200':
-          description: List of artists retrieved
+          description: Liste des artistes récupérée avec succès
           content:
             application/json:
               schema:
@@ -13,7 +19,7 @@
                 items:
                   $ref: '#/components/schemas/Artist'
     post:
-      summary: Create a new artist
+      summary: Créer un nouvel artiste
       tags: [Artists]
       requestBody:
         required: true
@@ -23,34 +29,34 @@
               $ref: '#/components/schemas/ArtistInput'
       responses:
         '201':
-          description: Artist created
+          description: Artiste créé avec succès
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artist'
-
 
   /artists/{id}:
     parameters:
       - name: id
         in: path
         required: true
+        description: Identifiant unique de l'artiste
         schema:
           type: integer
     get:
-      summary: Get an artist by ID
+      summary: Obtenir un artiste par ID
       tags: [Artists]
       responses:
         '200':
-          description: Artist details
+          description: Détails de l'artiste
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artist'
         '404':
-          description: Artist not found
+          description: Artiste non trouvé
     put:
-      summary: Update an artist
+      summary: Mettre à jour un artiste
       tags: [Artists]
       requestBody:
         required: true
@@ -60,16 +66,49 @@
               $ref: '#/components/schemas/ArtistInput'
       responses:
         '200':
-          description: Artist updated
+          description: Artiste mis à jour avec succès
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artist'
+        '404':
+          description: Artiste non trouvé
     delete:
-      summary: Delete an artist
+      summary: Supprimer un artiste
       tags: [Artists]
       responses:
         '204':
-          description: Artist deleted
+          description: Artiste supprimé avec succès
         '404':
-          description: Artist not found
+          description: Artiste non trouvé
+
+# Définition des modèles de données (Obligatoire pour les $ref)
+components:
+  schemas:
+    Artist:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        name:
+          type: string
+          example: "Daft Punk"
+        genre:
+          type: string
+          example: "Electronic"
+        biography:
+          type: string
+          example: "Duo de musique électronique français..."
+
+    ArtistInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        genre:
+          type: string
+        biography:
+          type: string
